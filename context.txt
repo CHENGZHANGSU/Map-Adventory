@@ -1,0 +1,73 @@
+FIT2099 Assignment 2 — Working Context
+========================================
+
+Project
+-------
+- Java 21 turn-based game: StackQueue Valley.
+- Project root: C:\Users\15014\Desktop\FIT2099\workspace\FIT2099-Assignment2\Assignment2
+- Entry point: game.Application.
+- Main game code: src/game; engine code: src/edu/monash/fit2099/engine.
+- The farm and mines are set up in game.StackQueueValleyWorld.
+- Existing features include crops, watering, mining, travel, trading, produce processing,
+  combat/weapon coatings, and SporeBeast behaviour.
+- Existing processing furniture follows Facility and ProcessAction patterns; cooked dishes
+  should be separate from processable produce where appropriate.
+
+Cooking Station requirement
+---------------------------
+- Add one solid Cooking Station, symbol K, on the farm. Actors cook from an adjacent tile.
+- The station offers one action per known recipe; cooking costs no stamina.
+- A failed recipe attempt spends the turn but consumes no items and changes nothing.
+- Ingredients belong to one category only: Fruit, Vegetable, or Animal product. Categories
+  and ingredients may grow in future; recipes must depend on categories, never concrete items.
+- Every selected ingredient applies its own cooking effect once, then is removed. Dishes are
+  not ingredients and cannot be cooked again.
+- Recipe execution order: validate all ingredients; apply each ingredient effect and remove it;
+  apply recipe cook effect; add a new dish object to the Farmer inventory.
+
+Ingredient rules
+----------------
+- Melon (Fruit): 50% chance to burst while used; deals 15 damage to every actor adjacent to
+  the station. It is consumed either way.
+- Parsnip (Vegetable): creates a Parsnip Crop on one random adjacent Soil tile, if present.
+- Egg (Animal product): 25% chance to hatch a Chicken on one random adjacent enterable tile,
+  if present. It is consumed either way.
+- Optional additional ingredients: Strawberry/Tomato as Fruit, Cauliflower as Vegetable, and
+  Milk as Animal product. Each must have a distinct cooking effect.
+
+Recipe rules
+------------
+- Fixed-amount recipes select exactly their stated counts by category.
+- Uses-everything recipes select every carried ingredient in one category and require at least one.
+- One ingredient may satisfy only one required slot.
+- Jam (J): uses every Fruit. Its pulp changes each adjacent bare Dirt tile to Soil. Each Jam
+  stores its own fruit count; eating it restores that many stamina points, capped at maximum.
+- Omelette (e): needs one Animal product and one Vegetable. 30% chance to place Fire on one
+  random adjacent tile (lifespan 2, burn duration 3, 5 damage per turn). Eating it removes all
+  Farmer status effects, beneficial or harmful.
+- Harvest Feast (H): needs 5 Fruit, 5 Vegetable, and 5 Animal product. A second feast is placed
+  on one random adjacent tile; the Farmer receives one. Eating it increases maximum HP and
+  stamina by 1 and fully restores both current values.
+
+Recommended design vocabulary
+-----------------------------
+- Ingredient and IngredientCategory.
+- Recipe abstraction, with FixedAmountRecipe and UsesEverythingRecipe specialisations.
+- JamRecipe, OmeletteRecipe, and HarvestFeastRecipe.
+- CookingStation and CookAction.
+- Dish base type with Jam, Omelette, and HarvestFeast subclasses.
+- Keep category selection, ingredient effects, recipe effects, and dish consumption effects
+  separate to preserve SOLID and DRY principles.
+
+Current user instruction
+------------------------
+- Do not modify game source files unless the user explicitly changes this instruction.
+- For the Cooking Station request, provide design artefacts such as test descriptions and
+  PlantUML only; do not implement classes.
+- Before undertaking any future communication or work for this project, read this context.txt
+  file first.
+
+Repository note
+---------------
+- The repository already contains user-owned, uncommitted changes. Preserve them and do not
+  reset, discard, or overwrite them.
